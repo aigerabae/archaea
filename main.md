@@ -66,11 +66,34 @@ Recent Transfer: DNA moved from unknown sources into the individual lineages of 
 
 
 
-Following archeae paper: https://www.nature.com/articles/s41598-020-77723-6#Sec10
+Following archeae paper: https://www.nature.com/articles/s41598-020-77723-6#Sec10  
+get homologues art tutorial at https://eead-csic-compbio.github.io/get_homologues/tutorial/pangenome_tutorial.html#3_analysis_of_bacterial_pan-genomes
 
 Estimating completeness and annotation
 ```bash
 conda install bioconda::checkm-genome
-checkm lineage_wf -t 28 -x fna ~/biostar/archaea/input ~/biostar/archaea/checkm
-
+checkm lineage_wf -t 28 -x fna ~/biostar/archaea/input ~/biostar/archaea/checkm # might want to do this on server bc my computer keeps clashing; i should have all the metrics in ncbi anyways
 ```
+
+Clustering:
+conda install bioconda::get_homologues
+# i copied files faa and fna for eacg if the 3 strains into get_homologues_input
+# ## 1 Compute orthologous gene clusters with default settings with BDBH
+
+get_homologues.pl -d ./get_homologues_input -n 20
+cd get_homologues_input_homologues/kbtz01_f0_alltaxa_algBDBH_e0_/
+
+# list contents (orthologous gene clusters) and count them
+ls && ls | wc
+# # 1426 gene clusters
+
+# 1.7 how many genes does each orthologous cluster contain?
+grep -c '>' *faa
+
+ # clusters that contain inparalogues (in this case over 3)
+grep -c '>' *faa | grep -v ':3'
+
+# OCML
+get_homologues.pl -d ./get_homologues_input -M -D -t 0 -A -P -c 
+
+get_homologues.pl -d ./get_homologues_input -D -n 20
