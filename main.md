@@ -100,3 +100,21 @@ get_homologues.pl -d ./get_homologues_input -M -D -t 0 -A -P -c
 
 get_homologues.pl -d ./get_homologues_input -D -n 20
 ```
+
+
+Gubbins on bacteriodales order:
+I first downloaded all archeaea in the order (all complete assemblies). Then I renamed all files to have the name of the species as specified in data_summary.tsv; i then renamed faa and fna files to have names of the folders its in (commands did not save). I then copied them to getting_other_refs and manually added halobacterium sallinarium refseq files to it and named them ref.fna and ref.faa. I also manually added kbtz01 because it was in inside folder and i had to remove them.
+I tried to run it like this with about 250 species but my computer clashed so i kept only those in the list provided by Dos.
+
+
+Not present:
+Halobiforma  
+Halogranum  
+Halomicroarcula  
+Halonotius  
+Natronobacteria  
+Natronolimnobius  
+Natronolimnohabitans  
+Salinirubrum  
+
+I saved all items in list (1 for each genus) to_keep.tsv - this resulted in 39 entries
