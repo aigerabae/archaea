@@ -25,6 +25,7 @@ run_gubbins.py --tree-builder fasttree --filter-percentage 90 kbt.aln
 ```
 
 Result without fasttree:
+```result
 Filtering input alignment...
 Excluded sequence KBTZ01 because it had 51.62675743307761 percentage missing data while a maximum of 25.0 is allowed
 Excluded sequence KBTZ05 because it had 83.74308550920286 percentage missing data while a maximum of 25.0 is allowed
@@ -63,7 +64,7 @@ While Gubbins doesn't name the "donor" species, it shows the direction of inheri
 Ancestral Transfer: DNA moved from an unknown source into the common ancestor (Node 1).
 
 Recent Transfer: DNA moved from unknown sources into the individual lineages of KBTZ01 and KBTZ06 after they split.
-
+```
 
 
 Following archeae paper: https://www.nature.com/articles/s41598-020-77723-6#Sec10  
@@ -76,6 +77,7 @@ checkm lineage_wf -t 28 -x fna ~/biostar/archaea/input ~/biostar/archaea/checkm 
 ```
 
 Clustering:
+```bash
 conda install bioconda::get_homologues
 # i copied files faa and fna for eacg if the 3 strains into get_homologues_input
 # ## 1 Compute orthologous gene clusters with default settings with BDBH
@@ -97,3 +99,4 @@ grep -c '>' *faa | grep -v ':3'
 get_homologues.pl -d ./get_homologues_input -M -D -t 0 -A -P -c 
 
 get_homologues.pl -d ./get_homologues_input -D -n 20
+```
