@@ -123,7 +123,11 @@ I added kbtz and ref to the list to move them as well
 mkdir -p selection && while IFS= read -r entry; do mv *"$entry"* selection/ 2>/dev/null; done < to_keep.tsv
 ```
 
+Getting alignment and runbning gubbins:
+```bash
 conda activate archaea
 cd ~/biostar/archaea/getting_other_refs/selection
 for f in *fna; do echo -e "${f%.fna}\t${f}"; done > isolates.list
 generate_ska_alignment.py --reference ref.fna --input isolates.list --out all.aln
+run_gubbins.py --tree-builder fasttree --filter-percentage 90 all.aln
+```
