@@ -129,5 +129,7 @@ conda activate archaea
 cd ~/biostar/archaea/getting_other_refs/selection
 for f in *fna; do echo -e "${f%.fna}\t${f}"; done > isolates.list
 generate_ska_alignment.py --reference ref.fna --input isolates.list --out all.aln
-run_gubbins.py --tree-builder fasttree --filter-percentage 90 all.aln
+run_gubbins.py --tree-builder fasttree --filter-percentage 90 all.aln --threads 25
 ```
+
+Excluded sequence Haloquadratum_walsbyi_C23 because it had 97.13600144875045 percentage missing data while a maximum of 90.0 is allowed
