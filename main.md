@@ -151,3 +151,25 @@ tasks:
 1) use species from kbtz05 and kbtz06 and re run gubbins
 2) use species between the 3 as reference
 3) get current (kbtz01 as ref) horizontally transferred genes and blast them
+
+
+### finding most simialr sequence to my 3: 
+conda install -c conda-forge -c bioconda mmseqs2
+mmseqs easy-cluster examples/DB.fasta clusterRes tmp --min-seq-id 0.5 -c 0.8 --cov-mode 1
+
+
+Using altair:
+conda create -n altair -c conda-forge -c bioconda altair-mf
+conda activate altair
+AltaiR -h
+python3 tree.py sim-data.csv -N 50
+bash Simulation.sh
+bash Similarity.sh ORIGINAL.fa
+bash SimProfile.sh sim-data.csv 2 0 1.2
+mv NCDProfilesim-data.csv.pdf NCD_P1.pdf
+
+using fastani:
+conda install bioconda::fastani
+ls *.fna > refs.txt
+ls *.fna > query.txt
+fastANI --ql query.txt --rl refs.txt -o many_to_many.txt -t 20
