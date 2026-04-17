@@ -173,3 +173,16 @@ conda install bioconda::fastani
 ls *.fna > refs.txt
 ls *.fna > query.txt
 fastANI --ql query.txt --rl refs.txt -o many_to_many.txt -t 20
+
+Most similar to everyone is Halobellus_limi
+
+conda activate archaea
+for f in *fna; do echo -e "${f%.fna}\t${f}"; done > isolates.list
+generate_ska_alignment.py --reference Halobellus_limi.fna --input isolates.list --out to_limi.aln
+run_gubbins.py --tree-builder fasttree --filter-percentage 90 to_limi.aln --threads 25
+
+I manually these Removed from isolates list (bc 0% similarity with Halobellus_limi)
+Haloquadratum_walsbyi_C23
+Halovenus_salina
+Haladaptatus_pallidirubidus
+and also ref and Halobellus_limi
