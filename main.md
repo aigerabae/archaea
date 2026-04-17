@@ -186,3 +186,11 @@ Haloquadratum_walsbyi_C23
 Halovenus_salina
 Haladaptatus_pallidirubidus
 and also ref and Halobellus_limi
+
+Filtering input alignment...
+Excluded sequence Halobacterium_salinarum_kbtz01 because it had 91.27283733656188 percentage missing data while a maximum of 90.0 is allowed
+Excluded sequence Halohasta_litchfieldiae because it had 91.70132990567723 percentage missing data while a maximum of 90.0 is allowed
+Excluded sequence Halorhabdus_sp._BNX81 because it had 90.66687289493825 percentage missing data while a maximum of 90.0 is allowed
+...done. Run time: 5.01 s
+
+I stopped it because it excluded kbtz01. thats weird bc i thought the alignment should be okay
