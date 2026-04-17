@@ -142,7 +142,9 @@ plot_gubbins.R --tree all.final_tree.tre --rec all.recombination_predictions.gff
 metadata aren't showing; neither ibube at phandango or with command (gives error). the colors in command line graph are too light, i cant see anything. There is a recombination event for kbtz06 that is not present at kbtz01 and kbtz05; might want to explore it
 I downloaded taxonomy to save it and use for plotting
 
-Rscript ./plot_gubbins.R --tree all.final_tree.tre --rec all.recombination_predictions.gff --annotation ref.gff --output all.png --show-taxa --taxon-label-size 2 --tree-width 2 --clades all_families.csv
+Rscript ./plot_gubbins.R --tree all.final_tree.tre --rec all.recombination_predictions.gff --annotation ref.gff --output all.png --show-taxa --taxon-label-size 2 --tree-width 2 --clades all_families.csv 
+Rscript ./plot_gubbins.R --tree all.final_tree.tre --rec all.recombination_predictions.gff --annotation ref.gff --output all.png --show-taxa --taxon-label-size 2 --tree-width 2 --clades all_families.csv 
+
 
 mkdir findings
 extract_recombinant_sequences.py --aln all.aln --gff all.recombination_predictions.gff --out-dir findings
@@ -172,7 +174,7 @@ using fastani:
 conda install bioconda::fastani
 ls *.fna > refs.txt
 ls *.fna > query.txt
-fastANI --ql query.txt --rl refs.txt -o many_to_many.txt -t 20
+fastANI --ql query.txt --rl refs.txt -o many_to_many.txt -t 20 --matrix
 
 Most similar to everyone is Halobellus_limi
 
