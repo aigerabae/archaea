@@ -51,3 +51,10 @@ Then
 ```bash
 orthofinder -f ./faa
 ```
+
+Summary: 
+ OrthoFinder assigned 146506 genes (93.6% of total) to 11624 orthogroups.       
+ 50% of genes were in orthogroups with 25 or more genes (G50 was 25) and were   
+ contained in the largest 2114 orthogroups (O50 was 2114).                      
+ There were 602 orthogroups with all species present and 453 of these consisted 
+ entirely of single-copy genes. 
