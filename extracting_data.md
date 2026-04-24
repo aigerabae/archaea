@@ -1,3 +1,7 @@
+Gubbins on bacteriodales order:
+I first downloaded all archeaea in the order (all complete assemblies). Then I renamed all files to have the name of the species as specified in data_summary.tsv; i then renamed faa and fna files to have names of the folders its in (commands did not save). I then copied them to getting_other_refs and manually added halobacterium sallinarium refseq files to it and named them ref.fna and ref.faa. I also manually added kbtz01 because it was in inside folder and i had to remove them.
+I tried to run it like this with about 250 species but my computer clashed so i kept only those in the list provided by Dos.
+
 I also extracted folders inside folders with
 ```bash
 mv */*/ .
@@ -40,3 +44,6 @@ for dir in */; do
     )
 done
 ```
+
+I want to either re-download it and do renaming again in a way that will conserve strain s well bc right now it doesn't save kbtz01, only as one of the halobacterium salinarium strains (unnamed)
+I want to try using all 278 assemblies for phylogeny
