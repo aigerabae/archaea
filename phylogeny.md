@@ -76,3 +76,8 @@ conda install -c bioconda famsa
 
 I tried running locally first but in 30 mins it barely finished a few percent. So i thought it might crash
 This doesn't work. I'll leave it for now. The options are tp use a different older method or stop after creating dendrogroups
+
+I will use -og fkag to stop the analysis after ortogroups:
+```bash
+orthofinder -f ./all_faa_files -og
+```
