@@ -37,3 +37,17 @@ exhaustive searches are only suitable for phylogenetic inference based on a smal
 4) BI = Bayesian inference
 The superiority of Bayesian inference lies in its ability to handle large datasets at a higher computational speed than maximum likelihood methods and to measure the confidence of trees through posterior probabilities.
 
+
+To make orthofinder work I had to:
+```bash
+# Remove everything after the first space in headers
+sed -i 's/ .*//' *.faa 
+
+# Remove asterisks (stop codons) and dots which often cause Diamond errors
+sed -i 's/[*.]//g' *.faa
+```
+
+Then 
+```bash
+orthofinder -f ./faa
+```
