@@ -1,8 +1,11 @@
 I created a new folder phylogeny and copied fna and faa files into diff folders. I removed ref and wlsby files from both 
 
+```bash
 conda install bioconda::orthofinder
 
 orthofinder -f ./faa -M msa
+```
+
 Didn't work. Not sure why
 
 
@@ -58,3 +61,18 @@ Summary:
  contained in the largest 2114 orthogroups (O50 was 2114).                      
  There were 602 orthogroups with all species present and 453 of these consisted 
  entirely of single-copy genes. 
+
+
+I will run all 272 species on server dell
+```bash
+conda create --name archaea
+conda activate archaea
+conda install bioconda::orthofinder
+orthofinder -f ./all_faa_files
+
+# didn't work with famsa so
+conda install -c bioconda famsa
+```
+
+I tried running locally first but in 30 mins it barely finished a few percent. So i thought it might crash
+This doesn't work. I'll leave it for now. The options are tp use a different older method or stop after creating dendrogroups
