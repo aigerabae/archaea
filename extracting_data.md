@@ -47,3 +47,13 @@ done
 
 I want to either re-download it and do renaming again in a way that will conserve strain s well bc right now it doesn't save kbtz01, only as one of the halobacterium salinarium strains (unnamed)
 I want to try using all 278 assemblies for phylogeny
+
+I did that and i had one folder that wasn't renamed and it wasn't any of the kbtz samples so i removed it: GCF_002156705.1
+
+I then copied all faa files into another folder all_faa_files
+```bash
+mkdir -p ../../all_faa_files
+find . -name "*.faa" -exec cp {} ../../all_faa_files/ \;
+```
+
+and ran otherfinder again on all 277 assemblies
