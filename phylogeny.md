@@ -115,3 +115,7 @@ nsample = 20000
 Explanations:
 
 Another potentially useful took from https://www.cell.com/current-biology/fulltext/S0960-9822(21)00577-7 paper = MCScanX (for finding expansion/shribking of henome)
+
+
+Following tutorial in https://github.com/sabifo4/Tutorial_MCMCtree.git
+(has all steps to get the right input files and run the analysis but only on 1 partition (one fasta file. i can cincatenate them into 1 but this will make it assume all genes had the same rate of evolution. but i dont know how to use multiple partitions yet)
