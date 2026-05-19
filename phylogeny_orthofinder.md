@@ -96,25 +96,30 @@ conda install bioconda::mafft
 conda install bioconda::gblocks
 
 cd /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/Single_Copy_Orthologue_Sequences
-ls *.fa | xargs -I {} echo "mafft --thread 1 --amino --inputorder --quiet {} >
-aln_{} ; Gblocks aln_{} -t=p -b5=h" > msa.batch
-less msa.batch
-screen
+ls *.fa | xargs -I {} echo "mafft --thread 1 --amino --inputorder --quiet {} > aln_{} ; Gblocks aln_{} -t=p -b5=h" > msa.batch
 parallel -j 20 < msa.batch
 ```
 
 After it's done:
 ```bash
-ls -l *gb
-less aln_OG0001399.fa-gb
+head aln_OG0000599.fa-gb.fa
 ```
 
-Building a tree:
+Concatenating all files together:
 ```bash
-mkdir MSAdir
-mv *gb MSAdir/
-python /shared_data/alignment2020/project3/concate_msa.py MSAdir
-raxml-ng --threads 25 --msa merged.fasta --model LG+G4 --prefix merged
+mkdir ../MSAdir
+cp *fa-gb.fa ../MSAdir/
+/home/aygera/tools/catfasta2phyml-master/catfasta2phyml.pl /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/MSAdir/*.fa > /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/out.phy > partitions.txt
+```
+
+Still the numbers don't allow me to make a single file. Why?
+```bash
+awk '!/^>/{print length($0)}' aln_OG0000512.fa-gb.fa | head -20
+awk '/^>/{if(seq!=""){print length(seq), name} name=$0; seq=""} !/^>/{seq=seq$0} END{print length(seq), name}'  aln_OG0000512.fa-gb.fa | awk '{print $1}' | sort -u
+for f in *.fa; do
+    unique=$(awk '/^>/{if(seq!=""){print length(seq)} name=$0; seq=""} !/^>/{seq=seq$0} END{print length(seq)}' "$f" | sort -u | wc -l)
+    [ "$unique" -gt 1 ] && echo "$f"
+done
 ```
 
 Generally speaking, protein input yields higher accuracy and more reliable phylogenetic trees than DNA input when you are looking at deeper evolutionary time scales (e.g., comparing different species, genera, or families). So I will be using protein input
@@ -142,3 +147,14 @@ I downloaded this script https://github.com/nylander/catfasta2phyml
 catfasta2phyml.pl *.fas > out.phy 2> partitions.txt
 
 This doesn't work because my alignment files have varying lengths. I don't know why. Something went wrong in the alignment process because for 275/375 genes it has varying length. I will run alignment as shown in the tutorial
+
+I made alignment again but conversion still doesn't work even tho manual checking didn't detect any incnsistencies. I will use another tool for conversion: https://github.com/PatrickKueck/FASconCAT-G
+
+```bash
+for f in *-gb.fa; do
+    cp "$f" "${f%-gb.fa}.fas"
+done
+perl /home/aygera/tools/FASconCAT-G-master/FASconCAT-G_v1.06.1.pl -s -p
+```
+
+I know the problem now. I have duplicate accessions for my species - i have 83 (as planned) samples but some of them are repeated several times. Probably they had the same accession number in NCBI. I need to map those repeating accessions back to species names
