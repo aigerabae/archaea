@@ -85,5 +85,60 @@ orthofinder -f ./all_faa_files -og
 I made a new selection of species that includes all families DK used, 2 for each genus and 1 more for our KBTZ samples. i also renamed them to have strains encoded in the name for clarity. some geni were not present in my selection (Halobacteriales order, annotated genomes and complete assembly only) - for some reason when i downloaded it was 278 and now its 282; i suppose someone added more assemblies in the meantime
 Do it on 83 species:
 ```bash
+conda activate archaea
 orthofinder -f /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected
 ```
+
+Running MSA with this tutorial: https://biohpc.cornell.edu/doc/alignment_exercise3.pdf
+Might not run it because I already have MSA with famsa done in orthofinder
+```bash
+conda install bioconda::mafft
+conda install bioconda::gblocks
+
+cd /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/Single_Copy_Orthologue_Sequences
+ls *.fa | xargs -I {} echo "mafft --thread 1 --amino --inputorder --quiet {} >
+aln_{} ; Gblocks aln_{} -t=p -b5=h" > msa.batch
+less msa.batch
+screen
+parallel -j 20 < msa.batch
+```
+
+After it's done:
+```bash
+ls -l *gb
+less aln_OG0001399.fa-gb
+```
+
+Building a tree:
+```bash
+mkdir MSAdir
+mv *gb MSAdir/
+python /shared_data/alignment2020/project3/concate_msa.py MSAdir
+raxml-ng --threads 25 --msa merged.fasta --model LG+G4 --prefix merged
+```
+
+Generally speaking, protein input yields higher accuracy and more reliable phylogenetic trees than DNA input when you are looking at deeper evolutionary time scales (e.g., comparing different species, genera, or families). So I will be using protein input
+
+To build a tree and get boostrapping values (with input in phy format & DNA model):
+raxml-ng --all --msa prim.phy --model GTR+G --prefix D1
+
+With input in fasta, amino acid model and 25 threads:
+raxml-ng --all --msa merged.fasta --model LG+G4 --prefix D1 --threads 25
+
+Ortofinder can identify horizontal gene transfer and the results are in Putative_Xenologs/. Need to take a look at that
+
+First I need to get alignments of those 375 genes:
+```bash
+cd /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/Single_Copy_Orthologue_Sequences
+ls > ../single_copy_list.txt
+cd ../
+mkdir -p MSA_single_copy
+xargs -I {} cp MultipleSequenceAlignments/{} MSA_single_copy/ < single_copy_list.txt
+```
+
+I downloaded this script https://github.com/nylander/catfasta2phyml
+/home/aygera/tools/catfasta2phyml-master/catfasta2phyml.pl /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/MSA_single_copy/*.fa > /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/out.phy > partitions.txt
+
+catfasta2phyml.pl *.fas > out.phy 2> partitions.txt
+
+This doesn't work because my alignment files have varying lengths. I don't know why. Something went wrong in the alignment process because for 275/375 genes it has varying length. I will run alignment as shown in the tutorial
