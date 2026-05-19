@@ -82,3 +82,8 @@ I will use -og fkag to stop the analysis after ortogroups:
 orthofinder -f ./all_faa_files -og
 ```
 
+I made a new selection of species that includes all families DK used, 2 for each genus and 1 more for our KBTZ samples. i also renamed them to have strains encoded in the name for clarity. some geni were not present in my selection (Halobacteriales order, annotated genomes and complete assembly only) - for some reason when i downloaded it was 278 and now its 282; i suppose someone added more assemblies in the meantime
+Do it on 83 species:
+```bash
+orthofinder -f /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected
+```
