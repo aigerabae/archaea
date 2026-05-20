@@ -158,3 +158,20 @@ perl /home/aygera/tools/FASconCAT-G-master/FASconCAT-G_v1.06.1.pl -s -p
 ```
 
 I know the problem now. I have duplicate accessions for my species - i have 83 (as planned) samples but some of them are repeated several times. Probably they had the same accession number in NCBI. I need to map those repeating accessions back to species names
+
+Turns out I had duplicate entries for proteins in closely related species. I will rename protein ids in faa files and re run orthofinder:
+```bash
+# For each .faa file, prepend a short species tag to every header
+for f in ./*.faa; do
+    tag=$(basename "$f" .faa)
+    sed "s/^>/>${tag}|/" "$f" > "${tag}_renamed.faa"
+done
+mkdir renamed
+mv *renamed.faa ./renamed/
+conda activate archaea
+orthofinder -f /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed
+```
+
+So the final results will be in /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May20/
+
+Will wait for it to complte about 1.5 hours
