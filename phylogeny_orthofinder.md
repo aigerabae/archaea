@@ -224,7 +224,18 @@ perl /home/aygera/tools/catfasta2phyml-master/catfasta2phyml.pl no_spaces_aln_*.
 
 RaXML-ng:
 ```bash
-raxml-ng --all --msa supermatrix.txt  --model LG+G4 --prefix v1 --threads 25
+raxml-ng --all \
+    --msa supermatrix.txt \
+    --model LG+G4+F \
+    --prefix v1 \
+    --threads 25 \
+    --bs-trees 1000 \
+    --seed 12345
 ```
 
-Started at 19:16, 21 May 2026
+Started at 19:24, 21 May 2026
+
+Some say the model should be chosen with some thinking. I will install the software and test it tomorrow if my run is still incomplete:
+```bash
+conda install bioconda::modeltest-ng
+```
