@@ -175,3 +175,36 @@ orthofinder -f /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_
 So the final results will be in /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May20/
 
 Will wait for it to complte about 1.5 hours
+
+MSA:
+```bash
+cd /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May20/Single_Copy_Orthologue_Sequences
+ls *.fa | xargs -I {} echo "mafft --thread 1 --amino --inputorder --quiet {} > aln_{} ; Gblocks aln_{} -t=p -b5=h" > msa.batch
+parallel -j 20 < msa.batch
+```
+
+Concatenating:
+```bash
+for f in *-gb.fa; do
+    cp "$f" "${f%-gb.fa}.fas"
+done
+perl /home/aygera/tools/FASconCAT-G-master/FASconCAT-G_v1.06.1.pl -s -p 
+```
+
+	!FILE-ERROR!: Unknown character found in sequence Haladaptatus_caseinilyticus_ZJ1|WP_266074721.1 of file aln_OG0000247.fa.fas!
+>Haladaptatus_caseinilyticus_ZJ1|WP_266074721.1
+MLDTVVIATD GSESVERAVT VALDLARRFD AEVHTLYVVD TGEVESSPET LREELHTALE
+SQGERALESI IVTAVREGDP AAEIREYARD HDADVVATGT RGRHGENRFL IGSVAERVVR
+TCPTPVLTVR QL
+
+This might be caused by spaces:
+```bash
+# Fix all alignment files at once
+for f in aln_*.fas; do
+    sed '/^>/! s/ //g' "$f" > "${f}"
+done
+```
+
+mkdir clean/
+mv *.clean ./clean/
+perl /home/aygera/tools/FASconCAT-G-master/FASconCAT-G_v1.06.1.pl -s -p 
