@@ -179,12 +179,14 @@ Will wait for it to complte about 1.5 hours
 MSA:
 ```bash
 cd /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May20/Single_Copy_Orthologue_Sequences
-ls *.fa | xargs -I {} echo "mafft --thread 1 --amino --inputorder --quiet {} > aln_{} ; Gblocks aln_{} -t=p -b5=h" > msa.batch
+mkdir alignment
+ls *.fa | xargs -I {} echo "mafft --thread 1 --amino --inputorder --quiet {} > ./alignment/aln_{} ; Gblocks ./alignment/aln_{} -t=p -b5=h" > msa.batch
 parallel -j 20 < msa.batch
 ```
 
-Concatenating:
+Changing format to fas and concatenating:
 ```bash
+cd alignment
 for f in *-gb.fa; do
     cp "$f" "${f%-gb.fa}.fas"
 done
@@ -201,10 +203,28 @@ This might be caused by spaces:
 ```bash
 # Fix all alignment files at once
 for f in aln_*.fas; do
-    sed '/^>/! s/ //g' "$f" > "${f}"
+    sed '/^>/! s/ //g' "$f" > "no_spaces_${f}"
 done
+mkdir no_spaces
+mv no_spaces_* ./no_spaces
 ```
 
-mkdir clean/
-mv *.clean ./clean/
+Running that perl script to get 1 file:
+```bash
+cd no__spaces
 perl /home/aygera/tools/FASconCAT-G-master/FASconCAT-G_v1.06.1.pl -s -p 
+```
+
+Process killed error. IDK why
+
+Finally:
+```bash
+perl /home/aygera/tools/catfasta2phyml-master/catfasta2phyml.pl no_spaces_aln_*.fa.fas --concatenate > supermatrix.txt 
+```
+
+RaXML-ng:
+```bash
+raxml-ng --all --msa supermatrix.txt  --model LG+G4 --prefix v1 --threads 25
+```
+
+Started at 19:16, 21 May 2026
