@@ -1,3 +1,5 @@
+Generally speaking, protein input yields higher accuracy and more reliable phylogenetic trees than DNA input when you are looking at deeper evolutionary time scales (e.g., comparing different species, genera, or families). So I will be using protein input
+
 I created a new folder phylogeny and copied fna and faa files into diff folders. I removed ref and wlsby files from both 
 
 ```bash
@@ -8,37 +10,6 @@ orthofinder -f ./faa -M msa
 
 Didn't work. Not sure why
 
-
-Fron https://pmc.ncbi.nlm.nih.gov/articles/PMC11117635/ (good review of methods for phylogeny)
-"Studies have reported that when using the same parameters and the same program, approximately 9% to 18% of single-gene phylogenetic trees cannot replicate the same topology [64]."
-So using multiple genes is beneficial
-
-Currently, there are two main methods for constructing multi-gene phylogenetic trees: 
-- concatenation phylogeny (one tree given all genes) =  supermatrix method or total evidence
- In addition, the supermatrix method usually assumes that all genes have undergone the same evolutionary process, while there may be lineage sorting during the evolution of species, which can lead to conflicts between gene trees and species trees
-
-- coalescence phylogeny (multiple trees for each gene, combined into 1) = supertree method or separate analysis
-Studies across multiple data sets have shown that multi-species supertree models generally outperform concatenation models in phylogenetic inference [82]. However, because the supertree method directly operates on the phylogenetic tree and utilizes tree information summarized from various data sets, it often overlooks a significant amount of phylogenetic information [71].
-
-
-Currently popular tree-building software includes PHYLIP [83], PAUP* [84], PhyML [85], MrBayes [86], MEGA [87], and Phylosuite [88].
-
-However, due to the preset nature of software functionalities and options, it is often challenging to meet users’ flexible analysis needs. Processing large datasets with these software tools can be cumbersome and slow, leading to various inconveniences.
-
-R offers a wide range of packages tailored for phylogenetic tree construction and analysis, including popular packages such as ape [92], phangorn [93], and dendextend [94].Notable examples include Treeio [95] and tidytree [96], which facilitate the manipulation of evolutionary trees and associated data within R.
-
-Methods for inferring trees:
-1) NJ = neighbor-joining: a representative method and one of the most popular distance-based methods
-The NJ method has high accuracy and fewer assumptions when reconstructing phylogenetic trees. the advantages of the NJ method over the parsimony method and likelihood method become more evident, leading to its wide usage in analyzing large datasets
-
-2) MP = maximum parsimony
-Maximum parsimony is known for its straightforward mathematical approach and absence of a specific model. It is well suited for data types where designing appropriate evolutionary models is challenging, such as rare features based on genomic rearrangements or unique morphological traits. However, when applied to large datasets, it frequently generates numerous potential rooted trees, rendering comprehensive comparisons unfeasible [28].
-
-3) ML = maximum likelihood
-exhaustive searches are only suitable for phylogenetic inference based on a small number of taxa, and for inference based on more taxa, tree space searches are usually heuristic [49].Because likelihood methods have clear model assumptions, the probability of systematic errors (such as long-branch attraction artifacts) is lower than that of parsimony methods. greatly increase the computational burden
-
-4) BI = Bayesian inference
-The superiority of Bayesian inference lies in its ability to handle large datasets at a higher computational speed than maximum likelihood methods and to measure the confidence of trees through posterior probabilities.
 
 
 To make orthofinder work I had to:
@@ -89,8 +60,9 @@ conda activate archaea
 orthofinder -f /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected
 ```
 
-Running MSA with this tutorial: https://biohpc.cornell.edu/doc/alignment_exercise3.pdf
-Might not run it because I already have MSA with famsa done in orthofinder
+#### Unsuccessful attempts to get an alignment file that made me rerun OrthFinder with renamed protein ids:
+Running MSA with this tutorial (to continue with RAXML-ng): https://biohpc.cornell.edu/doc/alignment_exercise3.pdf
+Initially thought I might not run it because I already have MSA with famsa done in orthofinder but it turned out wrong so i ran alignment anew eventually
 ```bash
 conda install bioconda::mafft
 conda install bioconda::gblocks
@@ -122,16 +94,6 @@ for f in *.fa; do
 done
 ```
 
-Generally speaking, protein input yields higher accuracy and more reliable phylogenetic trees than DNA input when you are looking at deeper evolutionary time scales (e.g., comparing different species, genera, or families). So I will be using protein input
-
-To build a tree and get boostrapping values (with input in phy format & DNA model):
-raxml-ng --all --msa prim.phy --model GTR+G --prefix D1
-
-With input in fasta, amino acid model and 25 threads:
-raxml-ng --all --msa merged.fasta --model LG+G4 --prefix D1 --threads 25
-
-Ortofinder can identify horizontal gene transfer and the results are in Putative_Xenologs/. Need to take a look at that
-
 First I need to get alignments of those 375 genes:
 ```bash
 cd /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/OrthoFinder/Results_May19/Single_Copy_Orthologue_Sequences
@@ -156,7 +118,7 @@ for f in *-gb.fa; do
 done
 perl /home/aygera/tools/FASconCAT-G-master/FASconCAT-G_v1.06.1.pl -s -p
 ```
-
+Didn't work.
 I know the problem now. I have duplicate accessions for my species - i have 83 (as planned) samples but some of them are repeated several times. Probably they had the same accession number in NCBI. I need to map those repeating accessions back to species names
 
 Turns out I had duplicate entries for proteins in closely related species. I will rename protein ids in faa files and re run orthofinder:
@@ -175,6 +137,8 @@ orthofinder -f /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_
 So the final results will be in /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May20/
 
 Will wait for it to complte about 1.5 hours
+
+Accidentally deleted results from 20th May; had to rerun on 21 May
 
 MSA:
 ```bash
@@ -222,20 +186,8 @@ Finally:
 perl /home/aygera/tools/catfasta2phyml-master/catfasta2phyml.pl no_spaces_aln_*.fa.fas --concatenate > supermatrix.txt 
 ```
 
-RaXML-ng:
-```bash
-raxml-ng --all \
-    --msa supermatrix.txt \
-    --model LG+G4+F \
-    --prefix v1 \
-    --threads 25 \
-    --bs-trees 1000 \
-    --seed 12345
-```
+Final results for Ortofinder are in ~/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May21/
 
-Started at 19:24, 21 May 2026
+Specifically RaxML-ng will ebe done in ~/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May21/Single_Copy_Orthologue_Sequences/alignment/no_spaces
 
-Some say the model should be chosen with some thinking. I will install the software and test it tomorrow if my run is still incomplete:
-```bash
-conda install bioconda::modeltest-ng
-```
+Ortofinder can identify horizontal gene transfer and the results are in Putative_Xenologs/. Need to take a look at that
