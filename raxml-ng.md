@@ -35,14 +35,17 @@ python build_supermatrix.py
 
 Rerunning modeltest on server (installed via conda the same way):
 ```bash
-modeltest-ng -d aa -i supermatrix.fa -o model_selection  -p 25 -r 42 -h uigfr -f ef -m DAYHOFF,LG,DCMUT,JTT,MTREV,WAG,RTREV,CPREV,VT,BLOSUM62,MTMAM,MTART,MTZOA,PMB,HIVB,HIVW,JTT-DCMUT,FLU,STMTREV,LG4M,LG4X,GTR
+sed -i 's/^DNA,/AA,/g' partitions.txt           # allows me to use partitions
+modeltest-ng -d aa -i supermatrix.fa -q partitions.txt -o model_selection -p 25 -r 42 -h uigfr -f ef -m DAYHOFF,LG,DCMUT,JTT,MTREV,WAG,RTREV,CPREV,VT,BLOSUM62,MTMAM,MTART,MTZOA,PMB,HIVB,HIVW,JTT-DCMUT,FLU,STMTREV,LG4M,LG4X,GTR                  # don't forget to delete checkpoints when changing parameters!
 ```
 
-Locally will rerun previous model and see if there any differences (previous results are in a separate folder) - i used slightly different model tho and only 100 bootstraps:
+Locally will rerun raxml-ng (previous results are in a separate folder) - i used partitions tho and only 100 bootstraps and a different model:
 ```bash
+sed -i 's/^DNA,/AA,/g' partitions.txt           # i thought it would allow me to use partitions
+sed -i 's/^AA,/LG,/g' partitions.txt            ## but turns out i needed to change it into LG instead
 raxml-ng --all \
     --msa supermatrix.fa \
-    --model LG+F+G \
+    --model partitions.txt \
     --prefix v2 \
     --threads 25 \
     --bs-trees 100 \
