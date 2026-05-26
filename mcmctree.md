@@ -233,3 +233,5 @@ halobacteriales_calib;Halobacterium_salinarum_91_R6;Haloarcula_halobia_XH51;'B(1
 ```
 
 The tip names in `tip1`/`tip2` must always be **exact names from your tree file** — those are just used by the R script to find the node. The TimeTree search can use any well-known strain of that genus.
+
+There arr trees https://www.nature.com/articles/s41598-020-77723-6/figures/4 and https://www.microbiologyresearch.org/content/journal/ijsem/10.1099/ijsem.0.006879
