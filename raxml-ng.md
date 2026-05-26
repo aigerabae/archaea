@@ -69,3 +69,5 @@ The quickest wins:
 Drop Gblocks or replace with trimAl -automated1
 Add the partition model (--model partitions.txt)
 Consider using the OrthoFinder species tree directly if your goal is a reliable reference — it's genuinely hard to beat for prokaryotic phylogenomics
+
+New results with partitioning from RaxMl-ng look more sensible already and it finished running in 40000 seconds (ab 14 hours) including bootstrap 100 replicates. Optimal model selection still didn't finish on server; for now, I will run MCMCTree on current raxml-ng results
