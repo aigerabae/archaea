@@ -36,7 +36,7 @@ python build_supermatrix.py
 Rerunning modeltest on server (installed via conda the same way):
 ```bash
 sed -i 's/^DNA,/AA,/g' partitions.txt           # allows me to use partitions
-modeltest-ng -d aa -i supermatrix.fa -q partitions.txt -o model_selection -p 25 -r 42 -h uigfr -f ef -m DAYHOFF,LG,DCMUT,JTT,MTREV,WAG,RTREV,CPREV,VT,BLOSUM62,MTMAM,MTART,MTZOA,PMB,HIVB,HIVW,JTT-DCMUT,FLU,STMTREV,LG4M,LG4X,GTR                  # don't forget to delete checkpoints when changing parameters!
+nohup modeltest-ng -d aa -i supermatrix.fa -q partitions.txt -o model_selection -p 25 -r 42 -h uigfr -f ef -m DAYHOFF,LG,DCMUT,JTT,MTREV,WAG,RTREV,CPREV,VT,BLOSUM62,MTMAM,MTART,MTZOA,PMB,HIVB,HIVW,JTT-DCMUT,FLU,STMTREV,LG4M,LG4X,GTR > modeltest_nohup.log 2>&1 &                  # don't forget to delete checkpoints when changing parameters!
 ```
 
 Locally will rerun raxml-ng (previous results are in a separate folder) - i used partitions tho and only 100 bootstraps and a different model:
@@ -82,4 +82,9 @@ raxml-ng --all \
     --threads 25 \
     --bs-trees 100 \
     --seed 12345
+```
+
+I copied all files and will run it on server with nohup as well:
+```bash
+nohup raxml-ng --all --msa supermatrix.fa --model partitions.txt --prefix v3 --threads 25 --bs-trees 100 --seed 12345 > raxmlng_nohup.log 2>&1 &
 ```
