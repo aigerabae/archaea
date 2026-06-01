@@ -73,6 +73,7 @@ Consider using the OrthoFinder species tree directly if your goal is a reliable 
 New results with partitioning from RaxMl-ng look more sensible already and it finished running in 40000 seconds (ab 14 hours) including bootstrap 100 replicates. Optimal model selection still didn't finish on server; for now, I will run MCMCTree on current raxml-ng results
 
 The modeltest-ng is expected to for 7-10 days more; but currently (80/375 partitions) the most common model is LG4X+I. I will re-run raxml-n with it
+```bash
 sed -i 's/^LG,/LG4X+I,/g' partitions.txt            
 raxml-ng --all \
     --msa supermatrix.fa \
@@ -81,3 +82,4 @@ raxml-ng --all \
     --threads 25 \
     --bs-trees 100 \
     --seed 12345
+```
