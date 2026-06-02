@@ -235,3 +235,26 @@ halobacteriales_calib;Halobacterium_salinarum_91_R6;Haloarcula_halobia_XH51;'B(1
 The tip names in `tip1`/`tip2` must always be **exact names from your tree file** — those are just used by the R script to find the node. The TimeTree search can use any well-known strain of that genus.
 
 There arr trees https://www.nature.com/articles/s41598-020-77723-6/figures/4 and https://www.microbiologyresearch.org/content/journal/ijsem/10.1099/ijsem.0.006879
+
+
+
+I will use the oldest node in timetree.org when looking up Halobacteria class which is
+Name: no name
+Rank: no rank
+Clade Size: 65
+Estimated Time: 413.7 MYA
+Adjusted Time: 2400
+
+If I look at the paper i see this but for that I would have to use an outgroup and re-run the analysis:
+Archaeoglobus/Haloferax split (3240 Ma)	node 8
+Methanosarcina/Haloferax split (2740 Ma)
+
+And the second timetree.org split i can use is Halobacterium and Halarchaeum = Halobacterium_salinarum_KBTZ01 and Halarchaeum_sp_CBA1220_CBA1220
+Name: no name
+Rank: no rank
+Clade Size: 2
+Estimated Time: 140.8 MYA
+Adjusted Time: 168
+CI: n/a
+
+but then my tree doesn't match with halomarina being the outgroup... might use just 1 calibration? either way i will wait for the new model to finish first
