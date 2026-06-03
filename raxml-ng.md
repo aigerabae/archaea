@@ -88,3 +88,5 @@ I copied all files and will run it on server with nohup as well:
 ```bash
 nohup raxml-ng --all --msa supermatrix.fa --model partitions.txt --prefix v3 --threads 25 --bs-trees 100 --seed 12345 > raxmlng_nohup.log 2>&1 &
 ```
+
+Elapsed time: 130507.298 seconds (this run) / 472996.746 seconds (total with restarts)
