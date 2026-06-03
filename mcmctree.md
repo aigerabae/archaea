@@ -204,3 +204,84 @@ None of it works. I think I should use a different version of mcmctree prepbasem
 conda install bioconda::paml==4.9
 cp /home/aygera/anaconda3/pkgs/paml-4.9-hec16e2b_7/dat/lg.dat ./
 when it asks for file i type lg.dat
+
+I canceled the run as soon as it created temporary files and did the following
+```
+sed -i 's/method\ \=\ 0/method\ \=\ 1/' tmp0001.ctl
+grep 'alpha' tmp0001.ctl   # You should see `fix_alpha = 0` and `alpha = 0.5`
+grep 'ncatG' tmp0001.ctl   # You should see `ncatG = 4`
+# the tutorial also says this: grep 'model' */*/tmp0001.ctl   # You should see `model = 3` (i.e., empirical+F model) but it won't work for my amino acid model so i skipped it
+```
+
+We have created a template bash script with flags (i.e., see script  `pipeline_Hessian_BASEML_template_PC.sh` in the [`scripts` directory](01_PAML/00_BASEML/scripts)), which will be replaced with the appropriate values by another bash script (i.e.,`generate_job_BASEML_PC.sh`, also saved in the [`scripts` directory](01_PAML/00_BASEML/scripts)). Please note that the second bash script will edit the template bash script according to the data alignment/s that will be analysed. We had already copied these scripts to the `example_dating` directory when setting our file structure. Therefore, we just need to execute the following code snippet there:
+```sh
+# Run from `example_dating` dir.
+# Please change directories until
+# you are there. Then, run the following
+# commands.
+home_dir=$( pwd )
+cd scripts
+chmod 775 *sh
+num_aln=1
+# Arg1: Number of alignments
+# Arg2: Path to the pipeline directory
+# Arg3: Name of the working directory (i.e., `example_dating` in this analysis)
+# Arg4: Name of the executable file for BASEML. E.g., `baseml4.10.7`, `baseml`, etc.
+# Arg5: Boolean, PAML exported to the path? `Y` or `N`.
+#       If `N`, the executable file will be required to be in the home dirctory,
+#       i.e., directory which name you type as `Arg3`.
+./generate_job_BASEML_PC.sh $num_aln $home_dir/pipelines_Hessian example_dating baseml Y
+```
+
+Next, we will go to the `pipelines_Hessian` directory and run the script that will have been generated using the commands above:
+
+```sh
+# Run from `example_dating/pipelines_Hessian`.
+# Please change directories until
+# you are there. Then, run the following
+# commands.
+#
+# If you list the content of this directory,
+# you will see the pipeline you will need 
+# to execute in a bash script called
+# `pipeline_Hessian.sh`
+ll *
+# Now, execute this bash script
+chmod 775 *sh
+./pipeline_Hessian.sh & # Include the `&` to run this job in the background!
+
+Again some damn error. I'm just gonna run MCMCMTree as is
+seed = -1
+   seqfile = mtCDNApri123.txt
+  treefile = mtCDNApri.trees
+  mcmcfile = mcmc.txt
+   outfile = out.txt
+
+     ndata = 3            * Number of partitions
+   seqtype = 2            * 0: nucleotides; 1:codons; 2:AAs
+   usedata = 2            * 2: approximate likelihood (requires an 'in.BV' file)
+     clock = 2            * 1: global clock; 2: independent; 3: correlated rates
+
+   RootAge = <24.0         * Constraint on root age
+
+     model = 8            * 8: LG empirical amino acid model
+     alpha = 0.5          * Alpha for gamma rates at sites (0.5 is standard for AAs)
+     ncatG = 4            * No. categories in discrete gamma (4 is standard for AAs)
+
+ cleandata = 0            * remove sites with ambiguity data (1:yes, 0:no)?
+
+   BDparas = 1 1 0.1      * birth, death, sampling
+
+* kappa_gamma and alpha_gamma are for nucleotides/codons and are ignored for AAs
+
+rgene_gamma = 2 20 1      * gammaDir prior for rate for genes
+sigma2_gamma = 1 10 1     * gammaDir prior for sigma^2 (for clock=2 or 3)
+
+  finetune = 1: .1 .1 .1 .1 .1 .1
+
+     print = 1            * 0: no mcmc sample; 1: everything except branch 2: ev...
+    burnin = 2000
+  sampfreq = 10
+   nsample = 20000
+
+nd this also needs more work. im gonna deal with it tomorow
