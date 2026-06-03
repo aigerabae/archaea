@@ -200,3 +200,7 @@ cp prepbaseml.ctl baseml.ctl
 baseml baseml.ctl
 
 None of it works. I think I should use a different version of mcmctree prepbaseml*ctl
+
+conda install bioconda::paml==4.9
+cp /home/aygera/anaconda3/pkgs/paml-4.9-hec16e2b_7/dat/lg.dat ./
+when it asks for file i type lg.dat
