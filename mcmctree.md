@@ -155,3 +155,48 @@ Now that we have the input files (alignment and tree files) and the instructions
 mcmctree prepbaseml*ctl # You may have other aliases to run `MCMCtree`, 
                         # so run this command accordingly!
 ```
+
+I had to change BDparas = 1 1 0.1 C because in new version they ask for this C flag
+
+Also my tree was unrooted so i had to redo  it on the level of v2.raxml.bestTree and repopulate my example_dating folder:
+```r
+library(phytools)
+tt_raxml <- read.tree("v2.raxml.bestTree")
+is.null(tt_raxml$edge.length)  # should be FALSE
+is.binary(tt_raxml)            # should be TRUE
+tt_rooted <- midpoint.root(tt_raxml)
+is.rooted(tt_rooted)           # should be TRUE
+write.tree(tt_rooted, "v2.raxml.bestTree_rooted")
+```
+
+Re-running those things:
+```bash
+cp v2.raxml.bestTree_rooted tree_example_uncalib.tree
+sed -i 's/:[0-9]*\.[0-9]*//g' tree_example_uncalib.tree
+# NOTE: This regular expresion will work with that example
+# file. You may have to use more complex regular expressions
+# if you have `E-` or even bootstrap values that you need
+# to get rid of!
+#
+# Add header
+sed -i '1s/^/4 1\n/' tree_example_uncalib.tree
+
+# adding calibrations - ran that IncludeCalibrations.R script but it has to be done in Rstudio rather than command line
+cd ~/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May21/Single_Copy_Orthologue_Sequences/alignment/no_spaces/mcmctree/example_dating
+cp ~/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May21/Single_Copy_Orthologue_Sequences/alignment/no_spaces/mcmctree/example_calib_MCMCtree.tree trees/calibrated/1
+# Transfer uncalibrated tree
+cp ~/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/OrthoFinder/Results_May21/Single_Copy_Orthologue_Sequences/alignment/no_spaces/mcmctree/tree_example_uncalib.tree trees/uncalibrated/1
+```
+
+My file aso had 41 instead of 83 1 in trees, i changd that manully 
+I also changed in cluster files:
+seqtype = 2    * 0: nucleotides; 1:codons; 2:AAs to have 2 (bc my data is aa)
+model = 11    * changed for most common AA model = LG
+
+I had to run BaseMl first
+cp prepbaseml.ctl baseml.ctl
+# in baseml.ctl i edited usedata = 1    * exact likelihood for Hessian calculation
+# and outfile = out_baseml.txt
+baseml baseml.ctl
+
+None of it works. I think I should use a different version of mcmctree prepbaseml*ctl
