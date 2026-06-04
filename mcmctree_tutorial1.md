@@ -1,3 +1,5 @@
+Old tutorial
+
 While I am waiting for optimal tree settings running with modeltest-ng, I will try to construct MCMTree time with 83 species using v2 tree made with raxml-ng and each gene as partition:
 git clone https://github.com/abacus-gene/paml.git
 
