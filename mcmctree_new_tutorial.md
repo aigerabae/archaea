@@ -20,3 +20,5 @@ sed 's/:[0-9]*\.[0-9]*//g' v2.raxml.bestTree_rooted > no_branch_lengths.tree
 I used Claude to add root calibration to it into Calibnodes_haloarchaea.tree
 
 The rest was as shown here: https://github.com/abacus-gene/paml-tutorial/blob/main/mcmctree-approxlnL-aa/README.md
+
+I am currently on this step: codeml *ctl > log_CODEML.txt
