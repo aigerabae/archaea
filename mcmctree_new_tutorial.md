@@ -37,3 +37,21 @@ do
 done
 cd $home_dir
 ```
+
+The priors are looking good. I will run the rest now:
+```bash
+## Run from `02_PAML`
+cd 01_MCMCtree
+home_dir=$( pwd )
+for i in `seq 1 6`
+do
+  printf "[[ Running MCMCtree for chain "$i" | posterior (ILN) ]]\n"
+  cd $home_dir/01_posterior/ILN/$i
+  mcmctree *ctl 2>&1 | tee log_mcmc$i"_postILN.txt"
+  printf "[[ Running MCMCtree for chain "$i" | posterior (GBM) ]]\n"
+  cd $home_dir/01_posterior/GBM/$i
+  mcmctree *ctl 2>&1 | tee log_mcmc$i"_postGBM.txt"
+done
+cd $home_dir
+grep 'Species tree for FigTree' -A1 00_prior/NODAT/1/out.txt | sed -n '2,2p' > 00_prior/node_tree.tree
+```
