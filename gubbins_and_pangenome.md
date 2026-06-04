@@ -198,3 +198,8 @@ Excluded sequence Halorhabdus_sp._BNX81 because it had 90.66687289493825 percent
 I stopped it because it excluded kbtz01. thats weird bc i thought the alignment should be okay
 
 
+
+I am in /mnt/harddisk/biostar/archaea/phylogeny/ncbi_dataset_with_proper_names/only_selected/renamed/gubbins
+I will run gubbins on my 83 species bigger dataset that I also used orthofinder on:
+for f in *fna; do echo -e "${f%.fna}\t${f}"; done > isolates.list
+generate_ska_alignment.py --reference GCF_004799605.1_ASM479960v1_genomic.fna --input isolates.list --out kbt.aln
