@@ -22,3 +22,18 @@ I used Claude to add root calibration to it into Calibnodes_haloarchaea.tree
 The rest was as shown here: https://github.com/abacus-gene/paml-tutorial/blob/main/mcmctree-approxlnL-aa/README.md
 
 I am currently on this step: codeml *ctl > log_CODEML.txt to calculate branch lengths, the gradient, and the Hessian; the process is running locally 
+This finished and now I am moving on
+
+Because it's my data I need to run priors first:
+```bash
+## Run from 02_PAML
+cd 01_MCMCtree
+home_dir=$( pwd )
+for i in `seq 1 6`
+do
+  cd $home_dir/00_prior/NODAT/$i
+  printf "[[ Running MCMCtree for chain "$i" | prior ]]\n"
+  mcmctree *ctl 2>&1 | tee log_mcmc$i"_prior.txt"
+done
+cd $home_dir
+```
